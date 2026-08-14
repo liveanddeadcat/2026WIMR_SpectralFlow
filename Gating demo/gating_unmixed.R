@@ -135,3 +135,42 @@ cyto_stats_compute(gs,
                    channels = c("CD69"),
                    stat = "median")
 
+# 20260814 update Pairwise scatter plots for phenotypic markers
+# Get the colnames and markers to plot
+cd4 <- cyto_extract(gs, parent = "CD4+ T cells")
+cd4_ff <- cyto_convert(cd4, return = "flowFrame")
+cd4_dat <- exprs(cd4_ff)
+names <- colnames(cd4_dat)
+
+# Keep an eye on the cyto_plot_explore function in CytoExploreR. But it has some bugs that's not fixed at the moment. So I'm just doing a simple loop here.
+
+png("pairwise_plt.png",
+    width = length(names) * 1000, height = length(names) * 1000, res = 300) # change as you want
+par(mfrow = c(length(names),length(names)), mar = c(2, 2, 1, 1))
+# plotting
+for (i in 1:length(names)) {
+  for (j in 1:length(names)) {
+    if (i == j) {
+      # Diagonal elements: density/histogram
+      cyto_plot(gs,
+                parent = "CD4+ T cells",
+                channels = names[i],   
+                title = names[i],
+                xlim = c(-1e4, 1e6),
+                popup = FALSE)
+    } else {
+      # Off-diagonal elements: pairwise 2 markers
+      cyto_plot(gs,
+                parent = "CD4+ T cells",
+                channels = c(names[j], names[i]),
+                title = paste(names[j], " ", names[i]),
+                xlim = c(-1e4, 1e6),
+                ylim = c(-1e4, 1e6),
+                popup = FALSE)
+    }
+  }
+}
+dev.off()
+
+
+
