@@ -10,7 +10,7 @@ gs <- cyto_setup(fcs_dir,
                  gatingTemplate = "unstained_gate.csv")
 
 # build the data transformer
-trans <- cyto_transformer_logicle(gs)
+trans <- cyto_transformer_logicle(gs, plot = F)
 
 # transform the data
 gs <- cyto_transform(gs, trans = trans)
@@ -35,12 +35,12 @@ cyto_gate_draw(gs,
 
 #AF profile
 af <- cyto_extract(gs, "Cells")
-af_ff <- cyto_convert(af, return = "flowFrame",
-                          inverse.transform = TRUE)
+af_ff <- cyto_convert(af, return = "flowFrame")
+af_ff_raw <- cyto_transform(af_ff, trans = trans, inverse = TRUE)
 
 
 # Output fcs files
-write.FCS(x = af_ff, filename = "Lympho_af.fcs")
+write.FCS(x = af_ff_raw, filename = "Lympho_af.fcs")
 
 
 
