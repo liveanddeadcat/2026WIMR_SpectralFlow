@@ -11,7 +11,7 @@ gs <- cyto_setup(fcs_dir,
                  gatingTemplate = "ols_gating.csv")
 
 # build the data transformer
-trans <- cyto_transformer_logicle(gs)
+trans <- cyto_transformer_logicle(gs, plot = F)
 
 # transform the data
 gs <- cyto_transform(gs, trans = trans)
